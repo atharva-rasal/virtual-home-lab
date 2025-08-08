@@ -1,8 +1,51 @@
-#VIRTUAL HOME LAB WALKTHROUGH
+# 🛡️ Cybersecurity Home Lab Setup (3-in-1)
 
-1. We started first with installing the Opnsense firewall and starting it on the virtual box. We assigned it 2 network adapter one with NAT for connecting to the internet and another with Internal Network (intnet) to connect to virtual internal network for the entire lab.
-2. We installed the Opnsense firewall with all the required settings. At the login screen, type in `installer` as the username and `opnsense` as the password. When asked about the keyboard layout, just press Enter to accept the default (usually US). Then choose to install OPNsense using the UFS file system — this is stable and works well for lab setups. Select the virtual hard disk you created earlier and proceed with installation. It will warn you that the disk will be erased, so confirm and let it install. After installation, set a new password for the `root` user (this will be used for future logins), and then choose to complete the installation and reboot the VM. Before rebooting, remove the ISO from the virtual drive so the system boots from the virtual hard disk next time.
-3. After the firewall starts we need to set the IP address for LAN as well as WAN. For LAN we set the local IP of `10.200.200.254` where `10.200.200` is also used for other devices on the network and give a subnet mask of 24 for Class C IP. The WAN address is automatically set by using DHCP.
-4. Then we used a Kali machine to test the firewall. The kali machine also has 2 network adapters where one is connected to the local internet and another one is connected to internal network (intnet). If we ping the firewall’s IP then it successfully sends the packet as both are connected on same network.
-5. We also opened the Opnsense firewall dashboard on Firefox by typing the firewall’s IP address on the browser and login using root’s password. Then we need to update to latest plugins and also add the plugin for virtualbox which is `os-virtualbox` . Thus we have successfully installed the OPNsense firewall and configured the LAN and WAN settings and tested it using Kali machine.
-6.
+This guide walks you through setting up a fully functional cybersecurity home lab that includes:
+
+- 🧨 Offensive Lab (Red Teaming)
+- 🛡️ Defensive Lab (Blue Teaming / SIEM)
+- 🧬 Malware Analysis Lab (Flare VM)
+
+> Based on a lab series by François from the Africana Institute of Technology.
+
+---
+
+## 🔧 System Requirements
+
+- **RAM**: 16 GB minimum (32 GB recommended)
+- **Disk**: 500 GB+ SSD
+- **OS**: Windows 10/11 (64-bit)
+- **Virtualization**: Enabled (check via Task Manager → Performance → CPU → Virtualization)
+
+---
+
+## 📦 Tools to Download
+
+| Tool | Purpose |
+|------|---------|
+| [VMware Workstation Pro](https://www.vmware.com/products/workstation-pro.html) | Virtualization platform |
+| [Kali Linux VM (VMware)](https://www.kali.org/get-kali/#kali-virtual-machines) | Penetration testing |
+| [Metasploitable 2](https://sourceforge.net/projects/metasploitable/) | Vulnerable machine |
+| [Ubuntu Desktop ISO](https://ubuntu.com/download/desktop) | Wazuh client |
+| [Ubuntu Server 20.04 LTS ISO](https://releases.ubuntu.com/20.04/) | Wazuh manager |
+| [Windows 10 ISO](https://www.microsoft.com/software-download/windows10) | Flare VM base |
+| [7-Zip](https://www.7-zip.org/) | Extract compressed files |
+| [Flare VM Script](https://github.com/mandiant/flare-vm) | Malware analysis toolkit |
+
+---
+
+## 🔴 Part 1: Offensive Lab (Kali + Metasploitable)
+
+1. **Install VMware Workstation Pro** and configure virtual network:
+   - Use NAT: `10.0.0.0/24`
+   - DHCP start: `.10`
+
+2. **Import VMs**:
+   - Kali VM (default: `kali/kali`)
+   - Metasploitable VM (default: `msfadmin/msfadmin`)
+
+3. **Ensure both are on NAT network**  
+   Test connectivity:
+   ```bash
+   ping 10.0.0.11  # From Kali
+   ping 10.0.0.10  # From Metasploitable
