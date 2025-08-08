@@ -6,8 +6,6 @@ This guide walks you through setting up a fully functional cybersecurity home la
 - 🛡️ Defensive Lab (Blue Teaming / SIEM)
 - 🧬 Malware Analysis Lab (Flare VM)
 
-> Based on a lab series by François from the Africana Institute of Technology.
-
 ---
 
 ## 🔧 System Requirements
